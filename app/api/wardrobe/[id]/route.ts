@@ -4,9 +4,10 @@ import { prisma } from '@/lib/db/prisma';
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth();
 
     if (!session?.user?.id) {
@@ -14,7 +15,7 @@ export async function GET(
     }
 
     const item = await prisma.clothingItem.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!item) {
@@ -37,9 +38,10 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth();
 
     if (!session?.user?.id) {
@@ -50,7 +52,7 @@ export async function PATCH(
     const { name, category, color, brand, season, occasion, imageUrl, tags } = body;
 
     const existingItem = await prisma.clothingItem.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existingItem) {
@@ -62,7 +64,7 @@ export async function PATCH(
     }
 
     const item = await prisma.clothingItem.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         name,
         category,
@@ -87,9 +89,10 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth();
 
     if (!session?.user?.id) {
@@ -97,7 +100,7 @@ export async function DELETE(
     }
 
     const existingItem = await prisma.clothingItem.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existingItem) {
@@ -109,7 +112,7 @@ export async function DELETE(
     }
 
     await prisma.clothingItem.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });

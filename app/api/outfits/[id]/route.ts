@@ -4,11 +4,12 @@ import { prisma } from '@/lib/db/prisma';
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const outfit = await prisma.outfit.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         items: {
           include: {
@@ -47,9 +48,10 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth();
 
     if (!session?.user?.id) {
@@ -60,7 +62,7 @@ export async function PATCH(
     const { name, description, occasion, season, imageUrl, isPublic } = body;
 
     const existingOutfit = await prisma.outfit.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existingOutfit) {
@@ -72,7 +74,7 @@ export async function PATCH(
     }
 
     const outfit = await prisma.outfit.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         name,
         description,
@@ -102,9 +104,10 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth();
 
     if (!session?.user?.id) {
@@ -112,7 +115,7 @@ export async function DELETE(
     }
 
     const existingOutfit = await prisma.outfit.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existingOutfit) {
@@ -124,7 +127,7 @@ export async function DELETE(
     }
 
     await prisma.outfit.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });
