@@ -7,7 +7,7 @@ datasource db {
 }
 
 model Account {
-  id                String  @id
+  id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
@@ -25,7 +25,7 @@ model Account {
 }
 
 model ClothingItem {
-  id              String           @id
+  id              String           @id @default(cuid())
   userId          String
   designerId      String?
   name            String
@@ -38,7 +38,7 @@ model ClothingItem {
   tags            String
   isDesignerPiece Boolean          @default(false)
   createdAt       DateTime         @default(now())
-  updatedAt       DateTime
+  updatedAt       DateTime         @updatedAt
   Designer        Designer?        @relation(fields: [designerId], references: [id])
   User            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   CollectionItem  CollectionItem[]
@@ -46,7 +46,7 @@ model ClothingItem {
 }
 
 model Collection {
-  id             String           @id
+  id             String           @id @default(cuid())
   designerId     String
   name           String
   description    String
@@ -55,13 +55,13 @@ model Collection {
   year           Int?
   isPublished    Boolean          @default(false)
   createdAt      DateTime         @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime         @updatedAt
   Designer       Designer         @relation(fields: [designerId], references: [id], onDelete: Cascade)
   CollectionItem CollectionItem[]
 }
 
 model CollectionItem {
-  id             String       @id
+  id             String       @id @default(cuid())
   collectionId   String
   clothingItemId String
   ClothingItem   ClothingItem @relation(fields: [clothingItemId], references: [id], onDelete: Cascade)
@@ -71,7 +71,7 @@ model CollectionItem {
 }
 
 model Designer {
-  id           String         @id
+  id           String         @id @default(cuid())
   userId       String         @unique
   brandName    String
   bio          String
@@ -80,14 +80,14 @@ model Designer {
   followers    Int            @default(0)
   verified     Boolean        @default(false)
   createdAt    DateTime       @default(now())
-  updatedAt    DateTime
+  updatedAt    DateTime       @updatedAt
   ClothingItem ClothingItem[]
   Collection   Collection[]
   User         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Follow {
-  id                            String   @id
+  id                            String   @id @default(cuid())
   followerId                    String
   followingId                   String
   createdAt                     DateTime @default(now())
@@ -98,7 +98,7 @@ model Follow {
 }
 
 model Like {
-  id        String   @id
+  id        String   @id @default(cuid())
   userId    String
   outfitId  String
   createdAt DateTime @default(now())
@@ -109,7 +109,7 @@ model Like {
 }
 
 model Outfit {
-  id          String       @id
+  id          String       @id @default(cuid())
   userId      String
   name        String
   description String?
@@ -120,7 +120,7 @@ model Outfit {
   saves       Int          @default(0)
   isPublic    Boolean      @default(true)
   createdAt   DateTime     @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime     @updatedAt
   Like        Like[]
   User        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   OutfitItem  OutfitItem[]
@@ -128,7 +128,7 @@ model Outfit {
 }
 
 model OutfitItem {
-  id             String       @id
+  id             String       @id @default(cuid())
   outfitId       String
   clothingItemId String
   ClothingItem   ClothingItem @relation(fields: [clothingItemId], references: [id], onDelete: Cascade)
@@ -138,7 +138,7 @@ model OutfitItem {
 }
 
 model Save {
-  id        String   @id
+  id        String   @id @default(cuid())
   userId    String
   outfitId  String
   createdAt DateTime @default(now())
@@ -149,7 +149,7 @@ model Save {
 }
 
 model Session {
-  id           String   @id
+  id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
