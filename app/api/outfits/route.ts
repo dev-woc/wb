@@ -20,12 +20,12 @@ export async function GET(req: Request) {
     const outfits = await prisma.outfit.findMany({
       where,
       include: {
-        items: {
+        OutfitItem: {
           include: {
-            clothingItem: true,
+            ClothingItem: true,
           },
         },
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -79,18 +79,18 @@ export async function POST(req: Request) {
         season,
         imageUrl,
         isPublic: isPublic ?? true,
-        items: {
+        OutfitItem: {
           create: itemIds.map((itemId: string) => ({
-            clothingItem: {
+            ClothingItem: {
               connect: { id: itemId },
             },
           })),
         },
       },
       include: {
-        items: {
+        OutfitItem: {
           include: {
-            clothingItem: true,
+            ClothingItem: true,
           },
         },
       },

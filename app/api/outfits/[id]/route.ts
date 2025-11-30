@@ -11,12 +11,12 @@ export async function GET(
     const outfit = await prisma.outfit.findUnique({
       where: { id },
       include: {
-        items: {
+        OutfitItem: {
           include: {
-            clothingItem: true,
+            ClothingItem: true,
           },
         },
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -84,9 +84,9 @@ export async function PATCH(
         isPublic,
       },
       include: {
-        items: {
+        OutfitItem: {
           include: {
-            clothingItem: true,
+            ClothingItem: true,
           },
         },
       },
