@@ -25,8 +25,8 @@ export async function GET(
         },
         _count: {
           select: {
-            likedBy: true,
-            savedBy: true,
+            Like: true,
+            Save: true,
           },
         },
       },

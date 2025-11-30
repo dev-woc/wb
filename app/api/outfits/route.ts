@@ -34,8 +34,8 @@ export async function GET(req: Request) {
         },
         _count: {
           select: {
-            likedBy: true,
-            savedBy: true,
+            Like: true,
+            Save: true,
           },
         },
       },
